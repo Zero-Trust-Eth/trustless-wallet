@@ -47,7 +47,7 @@ impl Mnemonic {
     }
 
     /// Returns an iterator over the words of the [Mnemonic]
-    pub fn words(&self) -> impl Iterator<Item = &'static str> + Clone + '_ {
+    pub fn words(&self) -> impl Iterator<Item = &'static str> {
         self.words
             .iter()
             .map(move |i| wordlist::WORDS[usize::from(*i)])
@@ -103,8 +103,10 @@ mod tests {
             entropy.copy_from_slice(&decode(&vector.0).unwrap());
             let expected_mnemonic = vector.1;
 
-            let mnemonic = Mnemonic::from_entropy(entropy);
-            let actual_mnemonic = mnemonic.words().collect::<Vec<_>>().join(" ");
+            let actual_mnemonic = Mnemonic::from_entropy(entropy)
+                .words()
+                .collect::<Vec<_>>()
+                .join(" ");
 
             assert_eq!(expected_mnemonic, actual_mnemonic);
         }
