@@ -9,9 +9,9 @@ const CHECKSUM_BITS: usize = 8;
 /// entropy must be 32 bytes
 const ENTROPY_LEN: usize = 32;
 
-/// A 24 word mnemonic code.
+/// A 24 word mnemonic code
 pub struct Mnemonic {
-    /// The indices of the words.
+    /// The indices of the words
     words: [u16; 24],
 }
 
@@ -46,7 +46,7 @@ impl Mnemonic {
         Mnemonic { words }
     }
 
-    /// Returns an iterator over the words of the [Mnemonic].
+    /// Returns an iterator over the words of the [Mnemonic]
     pub fn words(&self) -> impl Iterator<Item = &'static str> + Clone + '_ {
         self.words
             .iter()
