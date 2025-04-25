@@ -26,7 +26,7 @@ impl Mnemonic {
             }
         }
 
-        // we can rely on an external sha256 since it's only being used for generating checksums
+        // we can safely use a sha256 lib since it's only used for generating checksums
         let check = sha256::Hash::hash(&entropy);
         for i in 0..CHECKSUM_BITS {
             bits[8 * ENTROPY_LEN + i] = (check[i / 8] & (1 << (7 - (i % 8)))) > 0;
