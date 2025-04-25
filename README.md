@@ -1,3 +1,3 @@
 # Trustless Key Generation
 
-A library that enables trustless key generation from an air-gapped setup, with user supplied entropy. This repo is in the early stages of development. See [the wiki](https://github.com/Zero-Trust-Validators/trustless-keygen/wiki) for more information.
+A library for generating bip-39 mneumonics from user supplied entropy. See [the wiki](https://github.com/Zero-Trust-Validators/trustless-keygen/wiki) for more information.
