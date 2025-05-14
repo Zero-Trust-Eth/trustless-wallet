@@ -29,7 +29,7 @@ impl Mnemonic {
         // we can safely use a sha256 lib since it's only used for generating checksums
         let check = sha256::Hash::hash(&entropy);
         for i in 0..CHECKSUM_BITS {
-            bits[8 * ENTROPY_LEN + i] = (check[i / 8] & (1 << (7 - (i % 8)))) > 0;
+            bits[8 * ENTROPY_LEN + i] = (check[0] & (1 << (7 - (i % 8)))) > 0;
         }
 
         let mut words = [0; NB_WORDS];
