@@ -1,6 +1,5 @@
+use crate::sha256;
 use crate::wordlist;
-
-use bitcoin_hashes::{Hash, sha256};
 
 /// mnemonics are 24 words
 const NB_WORDS: usize = 24;
@@ -26,7 +25,6 @@ impl Mnemonic {
             }
         }
 
-        // we can safely use a sha256 lib since it's only used for generating checksums
         let check = sha256::Hash::hash(&entropy);
         for i in 0..CHECKSUM_BITS {
             bits[8 * ENTROPY_LEN + i] = (check[0] & (1 << (7 - (i % 8)))) > 0;

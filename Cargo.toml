@@ -3,9 +3,5 @@ name = "trustless-keygen"
 version = "0.1.0"
 edition = "2024"
 
-[dependencies]
-# we can rely on an external sha256 since it's only being used for generating checksums
-bitcoin_hashes = { version = ">=0.12, <=0.13", default-features = false }
-
 [dev-dependencies]
 hex = "0.4.3"
