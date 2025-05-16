@@ -1,3 +1,5 @@
+use crate::bools_to_bytes;
+use crate::bytes_to_bools;
 use crate::sha256;
 use crate::wordlist;
 
@@ -16,20 +18,15 @@ pub struct Mnemonic {
 
 impl Mnemonic {
     /// Create a new [Mnemonic] from the given entropy.
-    /// Entropy must be 256 bits in length.
-    pub fn from_entropy(entropy: [u8; ENTROPY_LEN]) -> Mnemonic {
-        let mut bits = [false; ENTROPY_LEN * 8 + CHECKSUM_BITS];
-        for i in 0..ENTROPY_LEN {
-            for j in 0..8 {
-                bits[i * 8 + j] = (entropy[i] & (1 << (7 - j))) > 0;
-            }
-        }
+    pub fn from_entropy(entropy: [bool; 256]) -> Mnemonic {
+        // calculate entropy checksum
+        let checksum = sha256::Hash::hash(&bools_to_bytes!(entropy))[0];
 
-        let check = sha256::Hash::hash(&entropy);
-        for i in 0..CHECKSUM_BITS {
-            bits[8 * ENTROPY_LEN + i] = (check[0] & (1 << (7 - (i % 8)))) > 0;
-        }
+        // append the first byte of the checksum to our entropy
+        let mut bits = Vec::from(entropy);
+        bits.extend(bytes_to_bools!(&[checksum]));
 
+        // calculate word indexes & return mnemonic
         let mut words = [0; NB_WORDS];
         for i in 0..NB_WORDS {
             let mut idx = 0;
@@ -40,7 +37,6 @@ impl Mnemonic {
             }
             words[i] = idx;
         }
-
         Mnemonic { words }
     }
 
@@ -55,6 +51,7 @@ impl Mnemonic {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::bytes_to_bools;
     use hex::decode;
 
     #[test]
@@ -97,15 +94,19 @@ mod tests {
         ];
 
         for vector in &test_vectors {
+            // extract entropy field from the test vector
             let mut entropy = [0u8; 32];
             entropy.copy_from_slice(&decode(&vector.0).unwrap());
             let expected_mnemonic = vector.1;
 
-            let actual_mnemonic = Mnemonic::from_entropy(entropy)
+            // convert entropy from bytes to bools
+            let entropy = bytes_to_bools!(&entropy);
+
+            // calculate mnemonic & verify result
+            let actual_mnemonic = Mnemonic::from_entropy(entropy.as_slice().try_into().unwrap())
                 .words()
                 .collect::<Vec<_>>()
                 .join(" ");
-
             assert_eq!(expected_mnemonic, actual_mnemonic);
         }
     }
