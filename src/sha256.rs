@@ -1,5 +1,6 @@
 //! A small, self-contained SHA256 implementation
-//! Copied from https://github.com/jedisct1/rust-hmac-sha256/blob/master/src/lib.rs
+//! Copied from https://github.com/jedisct1/rust-hmac-sha256/blob/d506031d73275dc28a0587530f42ec06c9648928/src/lib.rs
+#![allow(non_snake_case)]
 
 #[inline(always)]
 fn load_be(base: &[u8], offset: usize) -> u32 {
@@ -60,8 +61,6 @@ impl W {
         x.rotate_right(17) ^ x.rotate_right(19) ^ (x >> 10)
     }
 
-    #[cfg_attr(feature = "opt_size", inline(never))]
-    #[cfg_attr(not(feature = "opt_size"), inline(always))]
     fn M(&mut self, a: usize, b: usize, c: usize, d: usize) {
         let w = &mut self.0;
         w[a] = w[a]
@@ -90,8 +89,6 @@ impl W {
         self.M(15, (15 + 14) & 15, (15 + 9) & 15, (15 + 1) & 15);
     }
 
-    #[cfg_attr(feature = "opt_size", inline(never))]
-    #[cfg_attr(not(feature = "opt_size"), inline(always))]
     fn F(&mut self, state: &mut State, i: usize, k: u32) {
         let t = &mut state.0;
         t[(16 - i + 7) & 7] = t[(16 - i + 7) & 7]

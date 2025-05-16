@@ -3,13 +3,6 @@ use crate::bytes_to_bools;
 use crate::sha256;
 use crate::wordlist;
 
-/// mnemonics are 24 words
-const NB_WORDS: usize = 24;
-/// checksum is 1 byte
-const CHECKSUM_BITS: usize = 8;
-/// entropy must be 32 bytes
-const ENTROPY_LEN: usize = 32;
-
 /// A 24 word mnemonic code
 pub struct Mnemonic {
     /// The indices of the words
@@ -27,8 +20,8 @@ impl Mnemonic {
         bits.extend(bytes_to_bools!(&[checksum]));
 
         // calculate word indexes & return mnemonic
-        let mut words = [0; NB_WORDS];
-        for i in 0..NB_WORDS {
+        let mut words = [0; 24];
+        for i in 0..24 {
             let mut idx = 0;
             for j in 0..11 {
                 if bits[i * 11 + j] {
