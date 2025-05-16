@@ -1,4 +1,4 @@
-mod wordlist;
+use crate::wordlist;
 
 use bitcoin_hashes::{Hash, sha256};
 
