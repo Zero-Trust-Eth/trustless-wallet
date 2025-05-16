@@ -198,7 +198,6 @@ impl State {
     }
 }
 
-#[derive(Copy, Clone)]
 pub struct Hash {
     state: State,
     w: [u8; 64],
