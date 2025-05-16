@@ -3,7 +3,7 @@ use crate::mnemonic::Mnemonic;
 use hex::decode;
 
 #[test]
-fn test_mnemonic() {
+fn from_entropy() {
     // These vectors are tuples of
     // (entropy, mnemonic)
     let test_vectors = [
